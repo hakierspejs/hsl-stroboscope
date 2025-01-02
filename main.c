@@ -5,7 +5,6 @@
 int main(int argc, char *argv[])
 {
   int close = 0;  //for closing program
-  int fps = 20;
 
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) 
   {
@@ -58,6 +57,12 @@ int main(int argc, char *argv[])
     SDL_RenderPresent(rend);
  
     //limits fps to set value
+    int fps = 0;
+    while (fps == 0)
+    {
+      fps = rand() % 50 + 15; //random fps from 15 to 65
+    }
+
     SDL_Delay(1000 / fps);
   }
  
