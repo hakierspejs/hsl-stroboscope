@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 //#include <SDL2/SDL_timer.h>
+#include <stdbool.h>
 
 int main(int argc, char *argv[])
 {
@@ -19,11 +20,19 @@ int main(int argc, char *argv[])
 
   //HSŁ logo texture preparation
   SDL_Texture* hslLogoTexture = IMG_LoadTexture(rend, "hsl_logo.png");
-  SDL_Rect hslLogo;
-  hslLogo.x = 0;
-  hslLogo.y = 0;
-  hslLogo.w = 1920;
-  hslLogo.h = 1080;
+  SDL_Texture* cioranTexture = IMG_LoadTexture(rend, "djcioran.png");
+  SDL_Texture* dyingTexture = IMG_LoadTexture(rend, "zakaz_umierania.png");
+  
+  SDL_Rect image;
+  image.x = 0;
+  image.y = 0;
+  image.w = 1920;
+  image.h = 1080;
+
+
+
+  int image_id = 0;
+  bool key_pressed = false;
 
   while (!close) 
   {
@@ -38,11 +47,34 @@ int main(int argc, char *argv[])
         // handling of close button
           close = 1;
         break;
+
+        case SDL_KEYDOWN:
+          if(!key_pressed)
+          {
+            image_id++;
+
+            if(image_id == 3) image_id = 0;
+
+            key_pressed = true;
+          }
+        break;
+        
+        case SDL_KEYUP:
+          key_pressed = false;
+        break;
+
+
       }
     }
-  
+ 
+
+
     //sets random color to texture
     SDL_SetTextureColorMod(hslLogoTexture, 
+                           rand() % 256, rand() % 256, rand() % 256);
+    SDL_SetTextureColorMod(cioranTexture , 
+                           rand() % 256, rand() % 256, rand() % 256);
+    SDL_SetTextureColorMod(dyingTexture, 
                            rand() % 256, rand() % 256, rand() % 256);
 
  
@@ -51,7 +83,21 @@ int main(int argc, char *argv[])
     SDL_RenderClear(rend);
    
     //draw stuff
-    SDL_RenderCopy(rend, hslLogoTexture, NULL, &hslLogo);
+    switch(image_id)
+    {
+      case 0:
+        SDL_RenderCopy(rend, hslLogoTexture, NULL, &image);
+      break;
+      
+      case 1:
+        SDL_RenderCopy(rend, cioranTexture, NULL, &image);
+      break;
+      
+      case 2:
+        SDL_RenderCopy(rend, dyingTexture, NULL, &image);
+      break;
+    }
+    
 
     //render
     SDL_RenderPresent(rend);
