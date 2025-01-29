@@ -49,13 +49,22 @@ int main(int argc, char *argv[])
         break;
 
         case SDL_KEYDOWN:
-          if(!key_pressed)
+          switch(event.key.keysym.sym)
           {
-            image_id++;
+            case 32:  //Space
+              if(!key_pressed)
+              {
+                image_id++;
 
-            if(image_id == 3) image_id = 0;
+                if(image_id == 3) image_id = 0;
 
-            key_pressed = true;
+                key_pressed = true;
+              }
+            break;
+
+            case 27:  //Escape
+              close = 1;
+            break;
           }
         break;
         
