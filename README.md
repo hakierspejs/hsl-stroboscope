@@ -9,6 +9,11 @@ Images:
 2. DJ Cioran logo
 3. Zakaz umierania !!!
 
+Change colors by pressing those buttons:
+R - toggle red
+G - toggle green
+B - toggle blue
+
 Close program by pressing Escape key.
 
 ## Compiling

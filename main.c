@@ -32,6 +32,10 @@ int main(int argc, char *argv[])
   int image_id = 0;
   bool key_pressed = false;
 
+  bool red = true;
+  bool blue = true;
+  bool green = true;
+
   while (!close) 
   {
     SDL_Event event;
@@ -47,22 +51,49 @@ int main(int argc, char *argv[])
         break;
 
         case SDL_KEYDOWN:
-          printf("%d\n",event.key.keysym.sym); 
+          //printf("%d\n",event.key.keysym.sym); 
           switch(event.key.keysym.sym)
           {
-            case 49:  //1
+            case 49:  // 1
               image_id = 0;
             break;
 
-            case 50:  //2
+            case 50:  // 2
               image_id = 1;
             break;
 
-            case 51:  //3
+            case 51:  // 3
               image_id = 2;
             break;
 
-            case 32:  //Space
+            case 114: // R
+              if(!key_pressed)
+              {
+                red = !red;
+
+                key_pressed = true;
+              }
+            break;
+
+            case 103: // B
+              if(!key_pressed)
+              {
+                blue = !blue;
+
+                key_pressed = true;
+              }
+            break;
+
+            case 98:  // G
+              if(!key_pressed)
+              {
+                green = !green;
+
+                key_pressed = true;
+              }
+            break;
+
+            case 32:  // Space
               if(!key_pressed)
               {
                 image_id++;
@@ -91,11 +122,17 @@ int main(int argc, char *argv[])
 
     //sets random color to texture
     SDL_SetTextureColorMod(hslLogoTexture, 
-                           rand() % 256, rand() % 256, rand() % 256);
+                           rand() * red % 256, 
+                           rand() * blue % 256, 
+                           rand() * green % 256);
     SDL_SetTextureColorMod(cioranTexture , 
-                           rand() % 256, rand() % 256, rand() % 256);
+                           rand() * red % 256, 
+                           rand() * blue % 256, 
+                           rand() * green % 256);
     SDL_SetTextureColorMod(dyingTexture, 
-                           rand() % 256, rand() % 256, rand() % 256);
+                           rand() * red % 256, 
+                           rand() * blue % 256, 
+                           rand() * green % 256);
 
  
     // clears the screen with black color
