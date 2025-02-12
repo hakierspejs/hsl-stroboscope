@@ -29,8 +29,6 @@ int main(int argc, char *argv[])
   image.w = 1920;
   image.h = 1080;
 
-
-
   int image_id = 0;
   bool key_pressed = false;
 
@@ -49,8 +47,21 @@ int main(int argc, char *argv[])
         break;
 
         case SDL_KEYDOWN:
+          printf("%d\n",event.key.keysym.sym); 
           switch(event.key.keysym.sym)
           {
+            case 49:  //1
+              image_id = 0;
+            break;
+
+            case 50:  //2
+              image_id = 1;
+            break;
+
+            case 51:  //3
+              image_id = 2;
+            break;
+
             case 32:  //Space
               if(!key_pressed)
               {

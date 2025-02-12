@@ -3,9 +3,13 @@ A project for New Year's Eve. Badly scaled logo of HSŁ flickering in random col
 
 Flicker rate (fps) changes every frame so it is less predictable.
 
-User can change image by pressing Space key. There are 3 images: HSŁ logo, DJ Cioran logo (who is also a member of our space) and "Zakaz umierania !!!" ("Dying prohibited !!!"). If you want to change images or their order, change the code and recompile (suckless way!!).
+Change images by pressing Space (next image) or pressing 1-3 keys.
+Images:
+1. badly scaled logo of HSŁ
+2. DJ Cioran logo
+3. Zakaz umierania !!!
 
-User can close program by pressing Escape key.
+Close program by pressing Escape key.
 
 ## Compiling
 1. Install SDL2
