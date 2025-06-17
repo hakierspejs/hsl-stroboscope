@@ -3,7 +3,7 @@ OBJ := $(SRC:.c=.o)
 EXE := hsl-stroboscope
 
 $(EXE): $(OBJ)
-	gcc $(OBJ) -o $(EXE) -Wall `pkg-config --cflags --libs SDL2_image`
+	gcc $(OBJ) -o $(EXE) -Wall `pkg-config --cflags --libs SDL2_image` -lm
 
 main.o: main.c
 	gcc main.c -c -o main.o -Wall `pkg-config --cflags --libs SDL2_image`

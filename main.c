@@ -2,6 +2,9 @@
 #include <SDL2/SDL_image.h>
 //#include <SDL2/SDL_timer.h>
 #include <stdbool.h>
+#include <math.h>
+
+#define PI 3.14159
 
 int main(int argc, char *argv[])
 {
@@ -12,8 +15,11 @@ int main(int argc, char *argv[])
     printf("error initializing SDL: %s\n", SDL_GetError());
   }
 
+  int screen_width = 1920;
+  int screen_height = 1080;
+
   SDL_Window* win = SDL_CreateWindow("HSLodz Stroboscope",
-                                     0, 0, 1920, 1080, 
+                                     0, 0, screen_width, screen_height, 
                                      SDL_WINDOW_FULLSCREEN);
 
   SDL_Renderer* rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
@@ -22,12 +28,14 @@ int main(int argc, char *argv[])
   SDL_Texture* hslLogoTexture = IMG_LoadTexture(rend, "hsl_logo.png");
   SDL_Texture* cioranTexture = IMG_LoadTexture(rend, "djcioran.png");
   SDL_Texture* dyingTexture = IMG_LoadTexture(rend, "zakaz_umierania.png");
-  
+  SDL_Texture* papajTexture = IMG_LoadTexture(rend, "rzultamordunia_1.png");
+
+
   SDL_Rect image;
   image.x = 0;
   image.y = 0;
-  image.w = 1920;
-  image.h = 1080;
+  image.w = screen_width;
+  image.h = screen_height;
 
   int image_id = 0;
   bool key_pressed = false;
@@ -35,9 +43,18 @@ int main(int argc, char *argv[])
   bool red = true;
   bool blue = true;
   bool green = true;
+    
+  int rzultosc = 256;
+
+  int frame = 0;
+  int fps = 144;
+  int flicker_rate = 15;
+  int time_for_rotation = 1.0;
 
   while (!close) 
   {
+    frame++;
+
     SDL_Event event;
  
     // Events management
@@ -55,30 +72,31 @@ int main(int argc, char *argv[])
           switch(event.key.keysym.sym)
           {
             case 49:  // 1
+              image.x = 0;
+              image.y = 0;
               image_id = 0;
             break;
 
             case 50:  // 2
+              image.x = 0;
+              image.y = 0;
               image_id = 1;
             break;
 
             case 51:  // 3
+              image.x = 0;
+              image.y = 0;
               image_id = 2;
+            break;
+            
+	          case 52:  // 4
+              image_id = 3;
             break;
 
             case 114: // R
               if(!key_pressed)
               {
                 red = !red;
-
-                key_pressed = true;
-              }
-            break;
-
-            case 103: // B
-              if(!key_pressed)
-              {
-                blue = !blue;
 
                 key_pressed = true;
               }
@@ -92,13 +110,22 @@ int main(int argc, char *argv[])
                 key_pressed = true;
               }
             break;
+            
+            case 103: // B
+              if(!key_pressed)
+              {
+                blue = !blue;
+
+                key_pressed = true;
+              }
+            break;
 
             case 32:  // Space
               if(!key_pressed)
               {
                 image_id++;
 
-                if(image_id == 3) image_id = 0;
+                if(image_id == 4) image_id = 0;
 
                 key_pressed = true;
               }
@@ -119,22 +146,39 @@ int main(int argc, char *argv[])
     }
  
 
+    if(frame % (fps / flicker_rate) == 0)
+    {
+      //sets random color to texture
+      SDL_SetTextureColorMod(hslLogoTexture, 
+                             rand() * red % 256, 
+                             rand() * green % 256,
+                             rand() * blue % 256);
+      SDL_SetTextureColorMod(cioranTexture , 
+                             rand() * red % 256, 
+                             rand() * green % 256,
+                             rand() * blue % 256);
+      SDL_SetTextureColorMod(dyingTexture, 
+                             rand() * red % 256, 
+                             rand() * green % 256,
+                             rand() * blue % 256);
+      
+      //set something between black and rzulty for papaj
+      rzultosc = rand() % 256;
+      SDL_SetTextureColorMod(papajTexture, 
+                             rzultosc, 
+                             rzultosc,
+                             0);				//blue lol 
+    }
+    	
+    
 
-    //sets random color to texture
-    SDL_SetTextureColorMod(hslLogoTexture, 
-                           rand() * red % 256, 
-                           rand() * blue % 256, 
-                           rand() * green % 256);
-    SDL_SetTextureColorMod(cioranTexture , 
-                           rand() * red % 256, 
-                           rand() * blue % 256, 
-                           rand() * green % 256);
-    SDL_SetTextureColorMod(dyingTexture, 
-                           rand() * red % 256, 
-                           rand() * blue % 256, 
-                           rand() * green % 256);
+    //hehe papiesz tanczy
+    if(image_id == 3)
+    {
+      image.y = sin(frame * 2 * PI / (time_for_rotation * fps)) * 100;
+      image.x = cos(frame * 2 * PI / (time_for_rotation * fps)) * 100;
+    }
 
- 
     // clears the screen with black color
     SDL_SetRenderDrawColor( rend, 0, 0, 0, 255 );
     SDL_RenderClear(rend);
@@ -153,19 +197,22 @@ int main(int argc, char *argv[])
       case 2:
         SDL_RenderCopy(rend, dyingTexture, NULL, &image);
       break;
+      
+      case 3:
+        SDL_RenderCopy(rend, papajTexture, NULL, &image);
+      break;
     }
     
 
     //render
     SDL_RenderPresent(rend);
  
-    //limits fps to set value
-    int fps = 0;
-    while (fps == 0)
+    /*while (fps == 0)
     {
-      fps = rand() % 50 + 15; //random fps from 15 to 65
-    }
+      fps = 15;
+    }*/
 
+    //limits fps to set value
     SDL_Delay(1000 / fps);
   }
  
