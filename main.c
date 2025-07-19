@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
   SDL_Texture* cioranTexture = IMG_LoadTexture(rend, "djcioran.png");
   SDL_Texture* dyingTexture = IMG_LoadTexture(rend, "zakaz_umierania.png");
   SDL_Texture* papajTexture = IMG_LoadTexture(rend, "rzultamordunia_1.png");
+  SDL_Texture* dziwnyTexture = IMG_LoadTexture(rend, "dziwnypapaj.png");
 
 
   SDL_Rect image;
@@ -48,8 +49,8 @@ int main(int argc, char *argv[])
 
   int frame = 0;
   int fps = 144;
-  int flicker_rate = 15;
-  int time_for_rotation = 1.0;
+  int flicker_rate = 5;
+  float time_for_rotation = 1.0;
 
   while (!close) 
   {
@@ -91,6 +92,12 @@ int main(int argc, char *argv[])
             
 	          case 52:  // 4
               image_id = 3;
+            break;
+	          
+            case 53:  // 5
+              image.x = 0;
+              image.y = 0;
+              image_id = 4;
             break;
 
             case 114: // R
@@ -168,6 +175,10 @@ int main(int argc, char *argv[])
                              rzultosc, 
                              rzultosc,
                              0);				//blue lol 
+      SDL_SetTextureColorMod(dziwnyTexture, 
+                             rzultosc, 
+                             rzultosc,
+                             0);				//blue lol 
     }
     	
     
@@ -200,6 +211,10 @@ int main(int argc, char *argv[])
       
       case 3:
         SDL_RenderCopy(rend, papajTexture, NULL, &image);
+      break;
+      
+      case 4:
+        SDL_RenderCopy(rend, dziwnyTexture, NULL, &image);
       break;
     }
     
